@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_02_163849) do
+ActiveRecord::Schema.define(version: 2020_10_02_193732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,4 +21,32 @@ ActiveRecord::Schema.define(version: 2020_10_02_163849) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "events", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.string "name"
+    t.text "description"
+    t.string "image"
+    t.string "slug"
+    t.datetime "start_date"
+    t.datetime "publish_date"
+    t.string "state"
+    t.integer "available_tickets"
+    t.integer "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_events_on_client_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.string "buyer_name"
+    t.string "buyer_email"
+    t.string "confirmation_code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_id"], name: "index_tickets_on_event_id"
+  end
+
+  add_foreign_key "events", "clients"
+  add_foreign_key "tickets", "events"
 end
