@@ -1,41 +1,29 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
 
-  # GET /events
-  def index
+  # GET /events/:id
+  def view
     @events = Event.all
 
-    render json: @events
+    render json: {"response": "view"}
   end
 
-  # GET /events/1
-  def show
-    render json: @event
+  # GET /events
+  def list
+    render json: {"response": "list"}
+    #render json: @event
   end
 
-  # POST /events
-  def create
+  # POST /event/:id/buy
+  def buy
     @event = Event.new(event_params)
 
-    if @event.save
-      render json: @event, status: :created, location: @event
-    else
-      render json: @event.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /events/1
-  def update
-    if @event.update(event_params)
-      render json: @event
-    else
-      render json: @event.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /events/1
-  def destroy
-    @event.destroy
+    render json: {"response": "buy"}
+    # if @event.save
+    #   render json: @event, status: :created, location: @event
+    # else
+    #   render json: @event.errors, status: :unprocessable_entity
+    # end
   end
 
   private

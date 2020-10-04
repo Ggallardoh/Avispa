@@ -1,20 +1,15 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :update, :destroy]
 
-  # GET /clients
-  def index
+  # GET /clients/:id/events
+  def list
     @clients = Client.all
 
     render json: @clients
   end
 
-  # GET /clients/1
-  def show
-    render json: @client
-  end
-
-  # POST /clients
-  def create
+  # POST /client/:id/events
+  def new
     @client = Client.new(client_params)
 
     if @client.save
@@ -24,18 +19,15 @@ class ClientsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /clients/1
-  def update
-    if @client.update(client_params)
-      render json: @client
+  # POST /clients/:id/events/:event_id/publish
+  def publish
+    @client = Client.new(client_params)
+
+    if @client.save
+      render json: @client, status: :created, location: @client
     else
       render json: @client.errors, status: :unprocessable_entity
     end
-  end
-
-  # DELETE /clients/1
-  def destroy
-    @client.destroy
   end
 
   private
