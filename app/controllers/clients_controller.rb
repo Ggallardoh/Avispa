@@ -3,9 +3,9 @@ class ClientsController < ApplicationController
 
   # GET /clients/:id/events
   def list
-    @events = Event.select("'#{Event.model_name.plural}' as \"type\"", :id, :name, :start_date, :available_tickets, :price).where(client_id: params[:id])
+    @events = Event.where(client_id: params[:id])
     
-    render json: {"data": @events}, content_type: "application/vnd.api+json"
+    render jsonapi: @events, fields: {events: [:id, :name, :start_date, :available_tickets, :price]}
   end
 
   # POST /client/:id/events
@@ -30,7 +30,7 @@ class ClientsController < ApplicationController
     end
 
     if @event.save
-      render json: @event, status: :created, location: @client, content_type: "application/vnd.api+json"
+      render jsonapi: @event
     else
       render json: {"errors": @event.errors}, status: :bad_request, content_type: "application/vnd.api+json"
     end
@@ -41,7 +41,7 @@ class ClientsController < ApplicationController
     @event = Event.where(id: params[:event_id], client_id: params[:id])
 
     if @event.exists? && @event.update(state: "published")
-      render json: @event, status: :accepted, location: @client, content_type: "application/vnd.api+json"
+      render jsonapi: @event
     else
       render json: {"errors": {"description":["Event does not exist"]}}, status: :bad_request, content_type: "application/vnd.api+json"
     end

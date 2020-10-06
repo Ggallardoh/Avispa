@@ -4,7 +4,7 @@ class EventsController < ApplicationController
   # GET /events/:id
   def view
     if(@event.state == "published")
-      render json: @event.to_json(only: [:name, :description, :start_date, :available_tickets, :price, :image]), content_type: "application/vnd.api+json"
+      render jsonapi: @event, fields: {events: [:name, :description, :start_date, :available_tickets, :price, :image]}
     else
       render json: {"errors": {"description":["Event does not exist or unavailable"]}}, status: :bad_request, content_type: "application/vnd.api+json"
     end
@@ -12,8 +12,8 @@ class EventsController < ApplicationController
 
   # GET /events
   def list
-    @events = Event.select(:id, :name, :start_date, :available_tickets, :price).where(state: "published").where("start_date < ?", (DateTime.now + 1.week)).where("start_date > ?", DateTime.now)
-    render json: @events, content_type: "application/vnd.api+json"
+    @events = Event.where(state: "published").where("start_date < ?", (DateTime.now + 1.week)).where("start_date > ?", DateTime.now)
+    render jsonapi: @events, fields: {events:[:id, :name, :start_date, :available_tickets, :price]}
   end
 
   # POST /event/:id/buy
@@ -36,7 +36,7 @@ class EventsController < ApplicationController
 
       if @ticket.save
         @event.update(:available_tickets => (@event.available_tickets - 1))
-        render json: @ticket, content_type: "application/vnd.api+json"
+        render jsonapi: @ticket
       else
         render json: {"errors": @ticket.errors}, status: :bad_request, content_type: "application/vnd.api+json"
       end  
