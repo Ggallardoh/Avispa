@@ -3,9 +3,13 @@ class ClientsController < ApplicationController
 
   # GET /clients/:id/events
   def list
-    @events = Event.where(client_id: params[:id])
-    
-    render jsonapi: @events, fields: {events: [:id, :name, :start_date, :available_tickets, :price]}
+
+    if @client.present?
+      render jsonapi: @client.events, fields: {events: [:id, :name, :start_date, :available_tickets, :price]}
+     else
+      render json: {"errors": @client.errors}, status: :bad_request, content_type: "application/vnd.api+json"
+    end
+
   end
 
   # POST /client/:id/events
@@ -51,6 +55,8 @@ class ClientsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_client
       @client = Client.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: {"errors": "client does not exist"}, status: :bad_request, content_type: "application/vnd.api+json"
     end
 
     # Only allow a trusted parameter "white list" through.
