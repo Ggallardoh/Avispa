@@ -1,0 +1,14 @@
+event:
+  id: 1
+  name: "Eternal Sunshine of the Spotless Mind"
+  start_date: "2020-10-13T00:00:00.000Z"
+  publish_date: "2020-10-12T00:00:00.000Z"
+  available_tickets: 72,
+  price: 9407,
+  state: "published"
+  description: "Maxime officia rerum. Vero neque sed. Qui in nostrum."
+  image: "path/to/atque.docx"
+  slug: "2020-10-13-eternal-sunshine-of-the-spotless-mind"
+  created_at: "2020-10-10T00:00:00.000Z"
+  updated_at: "2020-10-10T00:00:00.000Z"
+  client_id: 1
