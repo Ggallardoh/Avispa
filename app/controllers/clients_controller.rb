@@ -4,12 +4,8 @@ class ClientsController < ApplicationController
   # GET /clients/:id/events
   def list
 
-    if @client.present?
-      render jsonapi: @client.events, fields: {events: [:id, :name, :start_date, :available_tickets, :price]}
-     else
-      render json: {"errors": @client.errors}, status: :bad_request, content_type: "application/vnd.api+json"
-    end
-
+    render jsonapi: @client.events, fields: {events: [:id, :name, :start_date, :available_tickets, :price]}
+    
   end
 
   # POST /client/:id/events
@@ -56,7 +52,7 @@ class ClientsController < ApplicationController
     def set_client
       @client = Client.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        render json: {"errors": "client does not exist"}, status: :bad_request, content_type: "application/vnd.api+json"
+        render json: {"errors": "Client does not exist"}, status: :bad_request, content_type: "application/vnd.api+json"
     end
 
     # Only allow a trusted parameter "white list" through.
